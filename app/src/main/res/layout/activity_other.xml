@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OtherActivity">
+<app.bxvip.com.myview.widget.SweepView
+    android:layout_width="match_parent"
+    android:layout_height="80dp">
+    <!--内容区域-->
+    <include layout="@layout/content"/>
+    <!--删除区域-->
+    <include layout="@layout/delete"/>
+</app.bxvip.com.myview.widget.SweepView>
+</RelativeLayout>

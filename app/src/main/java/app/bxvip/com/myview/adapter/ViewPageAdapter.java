@@ -12,6 +12,7 @@ import java.util.List;
 public class ViewPageAdapter extends PagerAdapter {
     private List<ImageView> images;
     private ViewPager viewPager;
+    private ImageView imageView;
 
     public ViewPageAdapter(List<ImageView> images,ViewPager viewPager) {
         this.images = images;
@@ -21,7 +22,7 @@ public class ViewPageAdapter extends PagerAdapter {
     //返回几个item
     @Override
     public int getCount() {
-        return images.size();
+        return Integer.MAX_VALUE;
     }
     //标记方法，用来判断缓存标记
     @Override
@@ -34,8 +35,9 @@ public class ViewPageAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         //添加要显示的View
-        ImageView imageView = images.get(position);
-        viewPager.addView(imageView);
+        imageView = images.get(position%5);
+            viewPager.addView(imageView);
+
         //记录缓存标记
         return imageView;
     }
@@ -43,7 +45,7 @@ public class ViewPageAdapter extends PagerAdapter {
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         //object就是标记
-        ImageView imageView = images.get(position);
+        ImageView imageView = images.get(position%5);
         viewPager.removeView(imageView);
     }
 }
