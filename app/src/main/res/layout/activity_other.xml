@@ -13,4 +13,11 @@
     <!--删除区域-->
     <include layout="@layout/delete"/>
 </app.bxvip.com.myview.widget.SweepView>
+<app.bxvip.com.myview.widget.CircleView
+    android:layout_marginTop="90dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="30dp"
+    app:circle_color="@color/light_green"
+    android:background="#33000000"/>
 </RelativeLayout>

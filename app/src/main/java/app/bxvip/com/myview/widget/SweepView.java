@@ -10,6 +10,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import okhttp3.OkHttpClient;
+
 /**
  * @author hb
  */
@@ -31,6 +33,7 @@ public class SweepView extends ViewGroup {
         viewDragHelper = ViewDragHelper.create(this, new MyCallBack());
     }
 
+    //xml绘制完成后
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -177,5 +180,10 @@ public class SweepView extends ViewGroup {
         if (viewDragHelper.continueSettling(true)){
             invalidate();
         }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
     }
 }

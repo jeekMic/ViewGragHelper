@@ -12,6 +12,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +31,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+    private static final String TAG = "MainActivity";
     private ViewPager viewpager;
     private TextView title;
     private List<ImageView> imageViews;
@@ -39,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_main);
         //初始化View
         initView();
@@ -46,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         initData();
         //初始化事件
         initEvent();
+
     }
 
     private void initData() {
@@ -249,5 +256,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 //
 //            }
 //        });
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        Log.i(TAG,"调用");
     }
 }
