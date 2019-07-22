@@ -103,8 +103,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         viewpager = findViewById(R.id.viewpager);
         title = findViewById(R.id.title);
         mPointContainer = findViewById(R.id.mPointContainer);
-
-
+        int hello = 32;
     }
 
     /**
