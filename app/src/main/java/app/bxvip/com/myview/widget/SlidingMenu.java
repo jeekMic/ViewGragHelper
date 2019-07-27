@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Scroller;
 
 public class SlidingMenu extends ViewGroup {
     private View mLeftView;
@@ -16,7 +17,7 @@ public class SlidingMenu extends ViewGroup {
     private int rightWidth;
     private float downX;
     private float downY;
-
+    private Scroller mScroller;
     public SlidingMenu(Context context) {
         this(context, null);
     }
@@ -27,6 +28,7 @@ public class SlidingMenu extends ViewGroup {
 
     public SlidingMenu(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mScroller = new Scroller(context);
     }
 
     //加载xml完成的时候回调
@@ -81,33 +83,76 @@ public class SlidingMenu extends ViewGroup {
         Log.i("main",event.getAction()+"");
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                //按下的时候点击屏幕的位置
                 downX = event.getX();
                 downY = event.getY();
                 break;
             case MotionEvent.ACTION_UP:
+                //判断是要打开还是关闭
+                int currentX = getScrollX();
+                int middle = -mLeftView.getMeasuredWidth()/2;
+                //这种做法太过突然 需要使用 scroller
+                if (currentX>middle){
+                    //关闭
+//                    scrollTo(0,0);
+                    //起始点--到结束点的过渡
+                    int startX = currentX;
+                    int startY = 0;
+                    int endX = 0;
+                    int endY = 0;
+                    int dx = endX - startX;
+                    int dy = endY-startY;
+                    int duration = 1000;
+                    mScroller.startScroll(startX,startY,dx,dy,duration);
+                }else{
+                    //打开
+                    int startX = currentX;
+                    int startY = 0;
+                    int endX = -leftWidth;
+                    int endY = 0;
+                    int dx = endX - startX;
+                    int dy = endY-startY;
+                    int duration = 1000;
+                    mScroller.startScroll(startX,startY,dx,dy,duration);
+
+//                    scrollTo(-mLeftView.getMeasuredWidth(),0);
+                }
+               invalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.i("main","ACTION_MOVE");
                 float moveX = event.getX();
                 float moveY = event.getY();
-                int diffx = (int) (downX-moveX+0.5f);//四舍五入
-                int scrollX = getScrollX()-diffx;
+                int diffX = (int) (downX-moveX+0.5f);//四舍五入
+                int scrollX = getScrollX()+diffX;
 
-                if (scrollX<=0 && scrollX<=-mLeftView.getMeasuredWidth()){
-                    //从左往右滑动
+                Log.i("log",diffX+" === "+scrollX+"=== "+(scrollX-diffX)+" "+mLeftView.getMeasuredWidth());
+                if (scrollX < -mLeftView.getMeasuredWidth()){
                     scrollTo(-mLeftView.getMeasuredWidth(),0);
-                }else if (scrollX>0){
+                }else if(scrollX>0){
                     scrollTo(0,0);
-                }else {
-                    scrollBy(diffx, 0);
+                } else{
+                    Log.i("log2",diffX+" === "+scrollX+" === "+(scrollX-diffX));
+                    scrollBy(diffX, 0);
                 }
-                downX = moveX;
-                downY= moveY;
+//                else if (scrollX>0){
+//                scrollTo(0,0);
+//            }
+
+                downX = event.getX();
+                downY = event.getY();
 
                 break;
             default:
                 break;
         }
         return true;
+    }
+    @Override
+    public void computeScroll() {
+        super.computeScroll();
+        if (mScroller.computeScrollOffset()) {
+            scrollTo(mScroller.getCurrX(), 0);
+            invalidate();
+        }
     }
 }
